@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -63,12 +64,17 @@ public class MainActivity extends AppCompatActivity {
     ImageView headImg;
     Bitmap bitmap = null;
     private Uri outPutUri;
+    private TextView username;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent intent=getIntent();
+        String name=intent.getStringExtra("用户名");
+        username =(TextView) findViewById(R.id.username);
+        username.setText("welcome "+name+" to the camera app!!!");
 
 
         Button photo = (Button)findViewById(R.id.Photo_main);
