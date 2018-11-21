@@ -8,14 +8,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-
-import java.io.File;
 
 public class Activity_camera extends AppCompatActivity {
 
@@ -61,7 +58,6 @@ public class Activity_camera extends AppCompatActivity {
                 new ConvertTask().execute(new Integer[] { TYPE_CONVERT, radius });
             }
         });
-
 
 
 
@@ -132,10 +128,6 @@ public class Activity_camera extends AppCompatActivity {
             switch (type) {
                 case TYPE_CONVERT:
                     result = testSketch.testGaussBlur(mSourceBitmap, r, r / 3);
-                    PhotoClipperUtil.saveMyBitmap(new File(Environment
-                            .getExternalStorageDirectory()
-                            + File.separator + "headIcon" ,
-                            String.valueOf(System.currentTimeMillis())),result);
                     break;
             }
 
