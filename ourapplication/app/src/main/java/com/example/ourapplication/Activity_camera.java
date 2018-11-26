@@ -3,7 +3,9 @@ package com.example.ourapplication;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,7 +19,6 @@ import android.widget.ImageView;
 public class Activity_camera extends AppCompatActivity {
 
 
-
     private ImageView picture;
     private Uri imageUri;
     //设置素描的常量请求
@@ -25,8 +26,6 @@ public class Activity_camera extends AppCompatActivity {
     private Bitmap mSourceBitmap;
     private Bitmap mConvertedBitmap;
     Uri clipPhotoUri;
-
-
 
     private static final int radius = 10;
     private static final int TYPE_CONVERT = 3;
@@ -45,24 +44,35 @@ public class Activity_camera extends AppCompatActivity {
         picture = (ImageView) findViewById(R.id.picture);
         //find the ImageView
         //在创建的时候就可以把bitmap数据取出来放到ImageView上面
-        Bitmap bitmap;
-        bitmap = BitmapFactory.decodeFile(PhotoClipperUtil.getPath(this,clipPhotoUri));
-        //这里用的游标找到的，说明在sqlite里面有记录，注意
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(PhotoClipperUtil.getPath
+                (this,clipPhotoUri));
 
-        picture.setImageBitmap(bitmap);
+        picture.setImageBitmap(bitmapDrawable.getBitmap());
 
 
         transform.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new ConvertTask().execute(new Integer[] { TYPE_CONVERT, radius });
+
             }
         });
 
-
-
     }
 
+    public Bitmap setSketchBackgroundColor(String color,Bitmap bitmap){
+        Bitmap bitmap2 = bitmap.copy(Bitmap.Config.RGB_565,true);
+
+        Bitmap bitmap1 = new Bitmap();
+        Canvas canvas = new Canvas(bitmap1);
+        canvas.drawARGB(100,0,0,255);
+        Matrix matrix = new Matrix();
+        matrix.setTranslate(100,100);
+        Paint paint = new Paint();
+        paint.setAlpha(105);
+        canvas.drawBitmap(bitmap2,matrix,paint);
+        return bitmap1;
+    }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
 /*            case Take_photo:
@@ -97,8 +107,9 @@ public class Activity_camera extends AppCompatActivity {
         protected void onPostExecute(Bitmap result) {
             mDialog.dismiss();
             if (result != null) {
-                mConvertedBitmap = result;
-                picture.setImageBitmap(result);
+//                mConvertedBitmap = result;
+                mConvertedBitmap = setSketchBackgroundColor("green",result);
+                picture.setImageBitmap(mConvertedBitmap);
             }
 
         }
@@ -135,13 +146,4 @@ public class Activity_camera extends AppCompatActivity {
         }
 
     }
-/*    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mTransformedBitmap != null) ;
-        mTransformedBitmap.recycle();
-        mTransformedBitmap = null;
-        //如果转换的 Bitmap还占用内存，清空
-    }*/
-
 }
