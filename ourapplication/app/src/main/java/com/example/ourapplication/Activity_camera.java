@@ -4,9 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -67,8 +69,6 @@ public class Activity_camera extends AppCompatActivity {
             }
         });
 
-<<<<<<< HEAD
-=======
         camera_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,20 +79,20 @@ public class Activity_camera extends AppCompatActivity {
         });
 
 
->>>>>>> b885b3930fc384f39f8b4fb1798aa82bc3fb8069
     }
 
     public Bitmap setSketchBackgroundColor(String color,Bitmap bitmap){
-        Bitmap bitmap2 = bitmap.copy(Bitmap.Config.RGB_565,true);
+//        Bitmap bitmap2 = bitmap.copy(Bitmap.Config.RGB_565,true);
 
-        Bitmap bitmap1 = new Bitmap();
+        ColorDrawable drawable = new ColorDrawable(Color.parseColor("#AA0000"));
+        Bitmap bitmap1 = Bitmap.createBitmap(bitmap.getWidth(),bitmap.getHeight(), Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(bitmap1);
-        canvas.drawARGB(100,0,0,255);
+        canvas.drawARGB(100,0,255,0);
         Matrix matrix = new Matrix();
         matrix.setTranslate(100,100);
         Paint paint = new Paint();
         paint.setAlpha(105);
-        canvas.drawBitmap(bitmap2,matrix,paint);
+        canvas.drawBitmap(bitmap,matrix,paint);
         return bitmap1;
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -11,12 +11,8 @@
     <LinearLayout
         android:id="@+id/camera_photo"
         android:layout_width="match_parent"
-<<<<<<< HEAD
         android:layout_height="400dp"
         android:scaleType="matrix"
-=======
-        android:layout_height="300dp"
->>>>>>> b885b3930fc384f39f8b4fb1798aa82bc3fb8069
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
