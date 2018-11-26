@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button photo = (Button)findViewById(R.id.Photo_main);
-        Button picture = (Button)findViewById(R.id.Pictur_main);
+        Button picture = (Button)findViewById(R.id.Picture_main);
         //两个按钮，一个是照相，一个是相册
         createFile();
         photo.setOnClickListener(new View.OnClickListener() {

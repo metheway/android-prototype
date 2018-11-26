@@ -3,6 +3,7 @@ package com.example.ourapplication;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,10 +23,17 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.io.File;
 
+
 public class  ResultActivity extends AppCompatActivity {
 
+    private Bitmap mSourceBitmap;
+    private Bitmap mConvertedBitmap;
+    Uri clipPhotoUri;
     private String APP_ID ="wx93285cfd2b026fc0";
     private String path = (String)getIntent().getSerializableExtra("path");
+
+
+
 
     private IWXAPI wxApi = WXAPIFactory.createWXAPI(ResultActivity.this,APP_ID);
     private static final int ThUMB_SIZE = 150;
@@ -45,6 +53,10 @@ public class  ResultActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        clipPhotoUri = Uri.parse(getIntent().getStringExtra("photoUri"));
+        final Bitmap Result_picture = BitmapFactory.decodeFile(PhotoClipperUtil.getPath(this,clipPhotoUri));
+
         //user button
 
         ImageButton fab = (ImageButton) findViewById(R.id.fab);
@@ -62,6 +74,8 @@ public class  ResultActivity extends AppCompatActivity {
         result_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent result_return = new Intent(ResultActivity.this,Activity_camera.class);
+                startActivity(result_return);
                 finish();
             }
         });
@@ -69,6 +83,7 @@ public class  ResultActivity extends AppCompatActivity {
         //picture_result
 
         ImageView result_picture = (ImageView)findViewById(R.id.result_image);
+        result_picture.setImageBitmap(Result_picture);
 
         //result_picture.setImageBitmap(bm);
 

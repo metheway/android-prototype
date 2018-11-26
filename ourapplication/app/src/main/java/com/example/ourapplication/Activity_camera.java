@@ -36,8 +36,9 @@ public class Activity_camera extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-        Button takePhoto = (Button) findViewById(R.id.back_button);
+        Button retakePhoto = (Button) findViewById(R.id.back_button);
         Button transform = (Button) findViewById(R.id.transform);
+        Button camera_next = (Button)findViewById(R.id.camrea_next);
         //find two buttons we need ,the takePhoto and transform
 
         clipPhotoUri = Uri.parse(getIntent().getStringExtra("photoUri"));
@@ -57,7 +58,28 @@ public class Activity_camera extends AppCompatActivity {
 
             }
         });
+        retakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent camera_back = new Intent(Activity_camera.this,MainActivity.class);
+                startActivity(camera_back);
+                finish();
+            }
+        });
 
+<<<<<<< HEAD
+=======
+        camera_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cemera_next = new Intent(Activity_camera.this,ResultActivity.class);
+                startActivity(cemera_next);
+                finish();
+            }
+        });
+
+
+>>>>>>> b885b3930fc384f39f8b4fb1798aa82bc3fb8069
     }
 
     public Bitmap setSketchBackgroundColor(String color,Bitmap bitmap){
