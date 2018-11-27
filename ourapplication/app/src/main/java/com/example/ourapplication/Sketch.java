@@ -258,17 +258,23 @@ public class Sketch {
             int nb = colorDodgeFormular(bb, mb);
 
             baseColor[i] = nb << 16 | nb << 8 | nb | 0xff000000;
-            //白色改透明色
-            if(baseColor[i] == 0xffffffff ){
+            //改颜色直接
+/*            if(baseColor[i] == 0xffffffff){
+                baseColor[i] = 0xff0000ff;
+            }*/
+            //改透明色
+            if(baseColor[i] == 0xff000000){
                 baseColor[i] = 0x00000000;
             }
-
-            //改颜色直接
-            if(baseColor[i] == 0xff000000 ){
-                baseColor[i] = 0xff0000ff;
-            }//如果是黑色，直接改成白色
-
-
+            //这个basecolor的数值我没有改
+            // nb左移16位？，和nb左移8位和nb和0xff000000不透明？并集？
+            //“颜色减淡”模式的公式是：基色+（基色*混合色）/（255-混合色）=结果色
+/*            int rColor = baseColor[i];
+            int rr = (rColor & 0x00000000);//找到基色
+            int mColor = mixColor[i];
+            int mr = (mColor & 0x00ff0000);//找到混合色
+            int nr = colorDodgeFormular(rr,mr);//这个DogeFormular就是减淡公式
+            baseColor[i] = nr << 16 | nr << 8 | nr | 0xff000000;*/
 
         }
 
