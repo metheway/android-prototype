@@ -1,79 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".Activity_camera">
 
-    <LinearLayout
-        android:id="@+id/camera_photo"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:scaleType="matrix"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_main2activity"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="start"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Light" />
+
 
         <ImageView
             android:id="@+id/picture"
-            android:layout_centerHorizontal="true"
-            android:scaleType="fitXY"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
             android:background="#66000000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="matrix"
+            android:layout_gravity="center"/>
 
-            android:layout_gravity="center_horizontal"/>
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:scaleType="matrix"-->/>
-    </LinearLayout>
+        <!--选图按钮-->
+        <RelativeLayout
+            android:id="@+id/choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="10dp">
 
-    <LinearLayout
-        android:id="@+id/camera_button"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/camera_photo"
-        app:layout_constraintVertical_bias="0.0">
+            <Button
+                android:id="@+id/chbutton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:background="@drawable/bgrefind2"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="5dp"/>
 
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="120dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="60dp"
-            android:text="重新选图" />
+            <TextView
+                android:id="@+id/chtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="重新选择图片"
+                android:layout_marginLeft="7dp"
+                android:layout_below="@+id/chbutton" />
 
-        <Button
+        </RelativeLayout>
+        <!--合成图片按钮-->
+        <RelativeLayout
             android:id="@+id/transform"
-            android:layout_width="120dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="30dp"
-            android:text="素描转换"
-            android:textColor="#666666"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/back_button" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="10dp">
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center_horizontal">
-        <Button
-            android:id="@+id/camrea_next"
-            android:layout_width="120dp"
-            android:layout_height="60dp"
-            android:text = "下一步"/>
-    </LinearLayout>
+            <Button
+                android:id="@+id/transformbutton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:background="@drawable/hecheng"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="12dp"/>
+
+            <TextView
+                android:id="@+id/dealtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合成图片"
+                android:layout_marginLeft="17dp"
+                android:layout_below="@+id/transformbutton" />
+
+        </RelativeLayout>
+        <!--背景选取按钮-->
+        <RelativeLayout
+            android:id="@+id/background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="10dp">
+
+            <Button
+                android:id="@+id/bgbutton"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:background="@drawable/backgroundchoose"
+                android:layout_margin="5dp"/>
+
+            <TextView
+                android:id="@+id/bgtext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选取背景色"
+                android:layout_marginRight="7dp"
+                android:layout_below="@+id/bgbutton" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bgchoose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/bgshow"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_above="@+id/bgshowcontrol"
+                android:background="#FFFFFF">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <RelativeLayout
+                android:id="@+id/bgshowcontrol"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="#FFFFFF"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" >
+
+                <Button
+                    android:id="@+id/yesbut"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:backgroundTint="#8D8C87"
+                    android:background="@drawable/nobtn"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_alignParentLeft="true" />
+
+                <TextView
+                    android:id="@+id/text_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:text="选择背景"
+                    android:textSize="18sp"/>
+
+                <Button
+                    android:id="@+id/nobut"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:backgroundTint="#8D8C87"
+                    android:background="@drawable/ysebtn"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.DrawerLayout>
