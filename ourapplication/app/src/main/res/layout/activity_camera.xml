@@ -128,7 +128,7 @@
                 android:layout_alignParentStart="true" >
 
                 <Button
-                    android:id="@+id/yesbut"
+                    android:id="@+id/nobut"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:backgroundTint="#8D8C87"
@@ -147,7 +147,7 @@
                     android:textSize="18sp"/>
 
                 <Button
-                    android:id="@+id/nobut"
+                    android:id="@+id/yesbut"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:backgroundTint="#8D8C87"
