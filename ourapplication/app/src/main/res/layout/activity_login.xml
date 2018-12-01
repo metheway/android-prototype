@@ -9,7 +9,7 @@
     android:paddingRight="16dp"
     android:paddingTop="16dp"
     tools:context=".LoginActivity"
-    android:background="@drawable/loading_pic">
+    android:background="@drawable/login1">
 
     <!-- Login progress -->
     <ProgressBar
@@ -19,6 +19,13 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:text="笔画印象（logo）"
+        android:textSize="30sp"/>
 
     <ScrollView
         android:id="@+id/login_form"
@@ -31,6 +38,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!--账户-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -47,6 +55,7 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <!--密码-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -72,10 +81,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="25dp"
-                android:background="@drawable/sign_button"
+                android:background="@drawable/register_button"
                 android:onClick="login"
                 android:text="@string/action_sign_in"
-                android:textColor="@drawable/white"
+                android:textColor="@drawable/black"
                 android:textStyle="bold" />
 
             <Button
@@ -85,9 +94,12 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/register_button"
                 android:onClick="regist"
+                android:textColor="@drawable/black"
                 android:text="@string/action_register"
                 android:textStyle="bold" />
 
         </LinearLayout>
+
     </ScrollView>
+
 </LinearLayout>

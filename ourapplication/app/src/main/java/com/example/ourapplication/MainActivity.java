@@ -1,42 +1,57 @@
 package com.example.ourapplication;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.example.ourapplication.PhotoClipperUtil.getImageContentUri;
-import static com.example.ourapplication.PhotoClipperUtil.getUriFromFile;
-import static com.example.ourapplication.PhotoClipperUtil.saveMyBitmap;
 
 public class MainActivity extends AppCompatActivity {
+
+    //******************************************************************************
+    private popWindow myPopWindow;
+    private DrawerLayout mainDrawerLayout;
+    private List<picSet> mRecommandList= new ArrayList<>();           //系统推荐&历史记录
+    private TextView hintText;
+    //******************************************************************************
+
 
 
     public static final String HEAD_ICON_DIC = Environment
@@ -73,63 +88,135 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent=getIntent();
         String name=intent.getStringExtra("用户名");
-        username =(TextView) findViewById(R.id.username);
-        username.setText("welcome "+name+" to the camera app!!!");
+//        username =(TextView) findViewById(R.id.username);
+//        username.setText("welcome "+name+" to the camera app!!!");
 
+        //***************************布局设置****************************************
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_mainwindow);
+        setSupportActionBar(toolbar);
 
-        Button photo = (Button)findViewById(R.id.Photo_main);
-        Button picture = (Button)findViewById(R.id.Picture_main);
-        //两个按钮，一个是照相，一个是相册
-        createFile();
-        photo.setOnClickListener(new View.OnClickListener() {
+        ActionBar actBar = getSupportActionBar();
+        if(actBar!=null){
+            actBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        mainDrawerLayout = (DrawerLayout)findViewById(R.id.main_drawerlayout);
+        NavigationView navView = (NavigationView)findViewById(R.id.nav_view);
+
+        Resources resource=(Resources)getBaseContext().getResources();
+        ColorStateList csl=(ColorStateList)resource.getColorStateList(R.color.text_color_navigation);
+        navView.setItemTextColor(csl);
+        navView.getMenu().findItem(R.id.email_icon).setTitle(intent.getStringExtra("用户名"));
+        //navView.setCheckedItem(R.id.email_icon);
+        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                //选择的是拍照的话，判断有没有权限
-                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission
-                        .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
-                        ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission
-                                .CAMERA)!= PackageManager.PERMISSION_GRANTED
-                        ){
-                    ActivityCompat.requestPermissions(MainActivity.this,new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission
-                            .CAMERA
-                    },REQUEST_IMAGE_CAPTURE);
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
 
-                }else{
-                    //权限已经申请了，那么直接拍照
-                    imageCapture();
+                    case R.id.history_icon:            //选择查看历史背景
+                        mainDrawerLayout.closeDrawers();
+                        Intent history_show = new Intent(MainActivity.this,HistoryActivity.class);
+                        startActivity(history_show);
+                        break;
+                    case R.id.bg_icon:                  //选择查看个人背景
+                        mainDrawerLayout.closeDrawers();
+                        break;
+                    default:
                 }
-            }
-            }
-        );
-
-        picture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {//这个才是相册
-                //权限申请，相册
-                if(ContextCompat.checkSelfPermission(MainActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                        PackageManager.PERMISSION_GRANTED){
-                    //权限还没有授予，需要在这里申请
-                    ActivityCompat.requestPermissions(MainActivity.this,
-                            new String[]{
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_IMAGE_GET);
-                }else{
-//                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    Intent intent = new Intent(Intent.ACTION_PICK);
-                    intent.setType("image/*");
-                    //判断系统中有没有处理这个intent的活动
-                    if(intent.resolveActivity(getPackageManager())!= null){
-                        startActivityForResult(intent,REQUEST_IMAGE_GET);
-                    }else{
-                        Toast.makeText(MainActivity.this,"没有找到图片查看器",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
+                return true;
             }
         });
+
+        initRecommand();
+        RecyclerView recommandView = (RecyclerView)findViewById(R.id.recommand);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        recommandView.setLayoutManager(layoutManager);
+
+        picViewAdapter recommandAdapter = new picViewAdapter(mRecommandList);                      //picViewAdapter.java
+        recommandView.setAdapter(recommandAdapter);
+
+
+        createFile();
+
+        hintText = (TextView)findViewById(R.id.hint);
+
+        Button picChoose = (Button) findViewById(R.id.addbutton);              //相册选图按钮
+        picChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myPopWindow = new popWindow(MainActivity.this, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Toast.makeText(MainActivity.this,"choose camera ", Toast.LENGTH_SHORT).show();
+                        //选择的是拍照的话，判断有没有权限
+                        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission
+                                .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                                ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission
+                                        .CAMERA) != PackageManager.PERMISSION_GRANTED
+                                ) {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission
+                                    .CAMERA
+                            }, REQUEST_IMAGE_CAPTURE);
+
+                        } else {
+                            //权限已经申请了，那么直接拍照
+                            imageCapture();
+                        }
+                        myPopWindow.dismiss();
+
+                    }
+
+                }, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //权限申请，相册
+                        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                                PackageManager.PERMISSION_GRANTED) {
+                            //权限还没有授予，需要在这里申请
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    new String[]{
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_IMAGE_GET);
+                        } else {
+//                          Intent intent = new Intent(Intent.ACTION_PICK);
+                            Intent intent = new Intent(Intent.ACTION_PICK);
+                            intent.setType("image/*");
+                            //判断系统中有没有处理这个intent的活动
+                            if (intent.resolveActivity(getPackageManager()) != null) {
+                                startActivityForResult(intent, REQUEST_IMAGE_GET);
+                            } else {
+                                Toast.makeText(MainActivity.this, "没有找到图片查看器",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        myPopWindow.dismiss();
+                    }
+                });
+                backgroundAlpha(0.7f);
+
+                myPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        //popupwindow消失的时候恢复成原来的透明度
+                        backgroundAlpha(1f);
+                    }
+                });
+                hintText.setVisibility(View.INVISIBLE);
+            }
+        });
+
+//        Button photo = (Button)findViewById(R.id.Photo_main);
+//        Button picture = (Button)findViewById(R.id.Picture_main);
+
     }
 
+    public void backgroundAlpha(float bgAlpha)
+    {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
 
     public void createFile(){
         int hasWriteStoragePermission = ContextCompat.checkSelfPermission(this,
@@ -356,4 +443,58 @@ public class MainActivity extends AppCompatActivity {
         }
         return file;
     }
+
+    //***************************************************************************************
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {                  //设定toolbar的menu
+        getMenuInflater().inflate(R.menu.personal_info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {                     //toolbar点击事件处理
+        switch (item.getItemId()) {              //判断点击的哪一个菜单项
+            case R.id.home:
+                finish();
+                break;
+            case R.id.personal_info:
+                mainDrawerLayout.openDrawer(GravityCompat.END);
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    private void initRecommand() {
+
+        picSet recommend1 = new picSet(R.drawable.u16,"系统推荐");
+        mRecommandList.add(recommend1);
+
+        picSet recommend2 = new picSet(R.drawable.u17,"系统推荐");
+        mRecommandList.add(recommend2);
+
+        picSet recommend3 = new picSet(R.drawable.u18,"系统推荐");
+        mRecommandList.add(recommend3);
+
+        picSet recommend4 = new picSet(R.drawable.u2,"系统推荐");
+        mRecommandList.add(recommend4);
+
+        picSet recommend5 = new picSet(R.drawable.u1,"系统推荐");
+        mRecommandList.add(recommend5);
+
+        picSet recommend6 = new picSet(R.drawable.u3,"系统推荐");
+        mRecommandList.add(recommend6);
+
+        picSet recommend7 = new picSet(R.drawable.u5,"系统推荐");
+        mRecommandList.add(recommend7);
+
+        picSet recommend8 = new picSet(R.drawable.u4,"系统推荐");
+        mRecommandList.add(recommend8);
+
+        //可以在首页展示历史记录
+
+
+    }
+    //**************************************************************************************
 }
