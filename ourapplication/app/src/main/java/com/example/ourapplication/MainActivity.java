@@ -140,14 +140,13 @@ public class MainActivity extends AppCompatActivity {
 
         hintText = (TextView)findViewById(R.id.hint);
 
-        Button picChoose = (Button) findViewById(R.id.addbutton);              //相册选图按钮
+        Button picChoose = (Button) findViewById(R.id.addbutton);
         picChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 myPopWindow = new popWindow(MainActivity.this, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //Toast.makeText(MainActivity.this,"choose camera ", Toast.LENGTH_SHORT).show();
                         //选择的是拍照的话，判断有没有权限
                         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission
                                 .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
@@ -179,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
                                     new String[]{
                                             Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_IMAGE_GET);
                         } else {
-//                          Intent intent = new Intent(Intent.ACTION_PICK);
                             Intent intent = new Intent(Intent.ACTION_PICK);
                             intent.setType("image/*");
                             //判断系统中有没有处理这个intent的活动
@@ -334,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
         headIconFile = new File(HEAD_ICON_DIC);
         headClipFile = getTempFile();
         clipFileNameStr = headClipFile.getName().toString();
+
 
         if(!headIconFile.exists()){
             boolean mkdirs = headIconFile.mkdirs();//如果是第一次，那么创建文件夹，那么创建

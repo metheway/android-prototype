@@ -13,10 +13,13 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 
 public class PhotoClipperUtil {
@@ -36,7 +39,6 @@ public class PhotoClipperUtil {
 
 
     public static void saveMyBitmap(File file, Bitmap mBitmap) {
-        //这个用字节流保存，非常慢
         try {
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
@@ -48,19 +50,31 @@ public class PhotoClipperUtil {
             e.printStackTrace();
         }
         FileOutputStream fOut = null;
+        ByteArrayOutputStream baos = null;
+
+        baos = new ByteArrayOutputStream();
+        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        while(baos.toByteArray().length / 1024 > 100){
+            baos.reset();
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        }
         try {
             fOut = new FileOutputStream(file);
+            fOut.write(baos.toByteArray());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
         try {
             fOut.flush();
+            baos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
             fOut.close();
+            baos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

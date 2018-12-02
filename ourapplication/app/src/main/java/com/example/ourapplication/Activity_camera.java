@@ -168,7 +168,6 @@ public class Activity_camera extends AppCompatActivity {
         Bitmap bitmap;
         bitmap = BitmapFactory.decodeFile(PhotoClipperUtil.getPath(this,clipPhotoUri));
         //这里用的游标找到的，说明在sqlite里面有记录，注意
-
         picture.setImageBitmap(bitmap);
 
     }
