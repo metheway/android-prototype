@@ -170,6 +170,7 @@ public class PhotoClipperUtil {
         return null;
     }
 
+
     /**
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
@@ -234,4 +235,6 @@ public class PhotoClipperUtil {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
+
+
 }

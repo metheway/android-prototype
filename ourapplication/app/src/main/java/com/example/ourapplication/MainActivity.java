@@ -30,10 +30,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.download.NetServiceTask;
+import com.example.download.URLPostHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,9 +61,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String HEAD_ICON_DIC = Environment
             .getExternalStorageDirectory()
             + File.separator + "headIcon";//存在sd卡上的headIcon里面
+    public static final String CLIP_ICON_DIC = Environment
+            .getExternalStorageDirectory()
+            + File.separator + "clipIcon";//存在sd卡上的headIcon里面
+
     private File headIconFile = null;// 相册或者拍照保存的文件
     private File headClipFile = null;// 裁剪后的头像
-    private String headFileNameStr = "tmp.jpg";//初始化这两个图片,实际不是这两个文件名称
+    private String headFileNameStr = "headIcon.jpg";//初始化这两个图片,实际不是这两个文件名称
     private String clipFileNameStr = "clipIcon.jpg";
     protected final String TAG = getClass().getSimpleName();
     private Uri pictureUri;//这个是照片的Uri，实际上就是headIconFile的Uri
@@ -80,14 +88,13 @@ public class MainActivity extends AppCompatActivity {
     Bitmap bitmap = null;
     private Uri outPutUri;
     private TextView username;
-
-
+    private String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent=getIntent();
-        String name=intent.getStringExtra("用户名");
+        name=intent.getStringExtra("用户名");
 //        username =(TextView) findViewById(R.id.username);
 //        username.setText("welcome "+name+" to the camera app!!!");
 
@@ -115,6 +122,30 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.history_icon:            //选择查看历史背景
                         mainDrawerLayout.closeDrawers();
+
+//                        String address = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1490783056273&di=6160d101d31dcf5f44b443ad9c5b2648&imgtype=0&src=http%3A%2F%2Fimg.sc115.com%2Fuploads%2Fallimg%2F110626%2F2011062622383898.jpg";
+                        String[] addresses = new String[]{
+                                "dd",
+                                "dd",
+                                "dsa",
+                                "fsa",
+                                "fasa",
+                                "fdsf"
+                        };
+                        String address = null;
+                        for(int i =0 ;i < addresses.length ;i++){
+                            address = addresses[i];
+                            NetServiceTask netServerTask = new NetServiceTask(address, new URLPostHandler() {
+                                @Override
+                                public void PostHandler(Bitmap bitmap) {
+                                    File file = new File(CLIP_ICON_DIC,getTempFile().getName());
+                                    PhotoClipperUtil.saveMyBitmap(file,bitmap);
+
+                                }
+                            });
+                            Thread thread = new Thread(netServerTask);
+                            thread.start();
+                        }//载入历史图片,保存到CLIP_ICON_DIC文件夹
                         Intent history_show = new Intent(MainActivity.this,HistoryActivity.class);
                         startActivity(history_show);
                         break;
@@ -208,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
 //        Button picture = (Button)findViewById(R.id.Picture_main);
 
     }
+
 
     public void backgroundAlpha(float bgAlpha)
     {
@@ -330,15 +362,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void initHeadIconFile() {
         headIconFile = new File(HEAD_ICON_DIC);
-        headClipFile = getTempFile();
+        headClipFile = new File(CLIP_ICON_DIC);
         clipFileNameStr = headClipFile.getName().toString();
 
 
         if(!headIconFile.exists()){
             boolean mkdirs = headIconFile.mkdirs();//如果是第一次，那么创建文件夹，那么创建
         }
+        if(!headClipFile.exists()){
+            boolean mkdirs = headClipFile.mkdirs();
+        }
         headIconFile = new File(HEAD_ICON_DIC,headFileNameStr);
-        headClipFile = new File(HEAD_ICON_DIC,clipFileNameStr);//创建裁剪文件
+        headClipFile = new File(CLIP_ICON_DIC,clipFileNameStr);//创建裁剪文件
     }
 
 

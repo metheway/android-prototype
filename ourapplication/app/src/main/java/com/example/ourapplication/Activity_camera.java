@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,7 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
 
     private ImageView picture;
     private Uri imageUri;
+    private File clipFile;
     //设置素描的常量请求
 
     private Bitmap mSourceBitmap;
@@ -138,6 +140,7 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
             @Override
             public void onClick(View v) {
                 new ConvertTask().execute(new Integer[] { TYPE_CONVERT, radius });
+
             }
         });
 
@@ -174,6 +177,8 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
         //*********************************************************************************
 
         clipPhotoUri = Uri.parse(getIntent().getStringExtra("photoUri"));
+
+        clipFile = getFileStreamPath(PhotoClipperUtil.getPath(this,clipPhotoUri));
         picture = (ImageView) findViewById(R.id.picture);
         //find the ImageView
         //在创建的时候就可以把bitmap数据取出来放到ImageView上面
@@ -281,6 +286,8 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
                 mSaveWindow = new saveWindow(Activity_camera.this, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        PhotoClipperUtil.saveMyBitmap(clipFile,mConvertedBitmap);
                         Toast.makeText(Activity_camera.this, "朋友圈", Toast.LENGTH_SHORT).show();
 
                         mSaveWindow.dismiss();            //关闭按钮
