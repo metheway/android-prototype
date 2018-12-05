@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -13,10 +14,14 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.UUID;
 
 
 public class PhotoClipperUtil {
@@ -36,7 +41,6 @@ public class PhotoClipperUtil {
 
 
     public static void saveMyBitmap(File file, Bitmap mBitmap) {
-        //这个用字节流保存，非常慢
         try {
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
@@ -48,19 +52,31 @@ public class PhotoClipperUtil {
             e.printStackTrace();
         }
         FileOutputStream fOut = null;
+        ByteArrayOutputStream baos = null;
+
+        baos = new ByteArrayOutputStream();
+        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        while(baos.toByteArray().length / 1024 > 100){
+            baos.reset();
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        }
         try {
             fOut = new FileOutputStream(file);
+            fOut.write(baos.toByteArray());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
         try {
             fOut.flush();
+            baos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
             fOut.close();
+            baos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -156,6 +172,7 @@ public class PhotoClipperUtil {
         return null;
     }
 
+
     /**
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
@@ -220,4 +237,31 @@ public class PhotoClipperUtil {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
+
+
+    /**
+     * 保存文件
+     * @param bm
+     * @param file
+     * @throws IOException
+     */
+    public static void saveFile(Context context,Bitmap bm, File file) throws IOException {
+/*        File dirFile = new File(Environment.getExternalStorageDirectory().getPath());
+        if(!dirFile.exists()){
+            dirFile.mkdir();
+        }*/
+
+//        File myCaptureFile = new File(Environment.getExternalStorageDirectory().getPath() +"/DCIM/Camera/"+ fileName);
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+        bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+        bos.flush();
+        bos.close();
+
+/*        //把图片保存后声明这个广播事件通知系统相册有新图片到来
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri uri = Uri.fromFile(myCaptureFile);
+        intent.setData(uri);
+        context.sendBroadcast(intent);*/
+    }
+
 }
