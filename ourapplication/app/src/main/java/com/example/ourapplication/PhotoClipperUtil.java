@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.UUID;
 
 
 public class PhotoClipperUtil {
@@ -236,5 +238,30 @@ public class PhotoClipperUtil {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 
+
+    /**
+     * 保存文件
+     * @param bm
+     * @param file
+     * @throws IOException
+     */
+    public static void saveFile(Context context,Bitmap bm, File file) throws IOException {
+/*        File dirFile = new File(Environment.getExternalStorageDirectory().getPath());
+        if(!dirFile.exists()){
+            dirFile.mkdir();
+        }*/
+
+//        File myCaptureFile = new File(Environment.getExternalStorageDirectory().getPath() +"/DCIM/Camera/"+ fileName);
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+        bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+        bos.flush();
+        bos.close();
+
+/*        //把图片保存后声明这个广播事件通知系统相册有新图片到来
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri uri = Uri.fromFile(myCaptureFile);
+        intent.setData(uri);
+        context.sendBroadcast(intent);*/
+    }
 
 }

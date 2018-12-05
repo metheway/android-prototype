@@ -55,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private List<picSet> mRecommandList= new ArrayList<>();           //系统推荐&历史记录
     private TextView hintText;
     //******************************************************************************
+    private Context mContext;
 
-
+    public Context getmContext() {
+        return getApplicationContext();
+    }
 
     public static final String HEAD_ICON_DIC = Environment
             .getExternalStorageDirectory()
@@ -125,12 +128,8 @@ public class MainActivity extends AppCompatActivity {
 
 //                        String address = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1490783056273&di=6160d101d31dcf5f44b443ad9c5b2648&imgtype=0&src=http%3A%2F%2Fimg.sc115.com%2Fuploads%2Fallimg%2F110626%2F2011062622383898.jpg";
                         String[] addresses = new String[]{
-                                "dd",
-                                "dd",
-                                "dsa",
-                                "fsa",
-                                "fasa",
-                                "fdsf"
+                                "http://www.vayhee.cn/eplatform/img/ad.jpg"
+
                         };
                         String address = null;
                         for(int i =0 ;i < addresses.length ;i++){
@@ -139,7 +138,12 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void PostHandler(Bitmap bitmap) {
                                     File file = new File(CLIP_ICON_DIC,getTempFile().getName());
-                                    PhotoClipperUtil.saveMyBitmap(file,bitmap);
+                                    try {
+                                        PhotoClipperUtil.saveFile(getmContext(),bitmap,file);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Toast.makeText(MainActivity.this,"dsfd",Toast.LENGTH_SHORT).show();
 
                                 }
                             });
@@ -429,14 +433,14 @@ public class MainActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
         }else{
-/*            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
 //                String url = PhotoClipperUtil.getPath(this, uri);//这个方法是处理4.4以上图片返回
                 // 的Uri对象不同的处理方法
                 String url = headIconFile.getAbsolutePath();
                 intent.setDataAndType(Uri.fromFile(new File(url)), IMAGE_TYPE);
-            } else {*/
+            } else {
             intent.setDataAndType(uri, IMAGE_TYPE);
-//            }
+            }
             //裁剪后图片输出
             outPutUri = getImageContentUri(this,headClipFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, outPutUri);
