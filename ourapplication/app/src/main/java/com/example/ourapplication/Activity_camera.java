@@ -27,11 +27,24 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//<<<<<<< Updated upstream
+//=======
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXImageObject;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.example.ourapplication.ResultActivity;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+//>>>>>>> Stashed changes
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Activity_camera extends AppCompatActivity implements View.OnTouchListener {
+import com.example.ourapplication.Weixin;
+
+public class Activity_camera extends AppCompatActivity {
+//>>>>>>> Stashed changes
 
     //*************************************************
     private List<bgSet> bgList= new ArrayList<>();
@@ -71,11 +84,15 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
     private static final int radius = 10;
     private static final int TYPE_CONVERT = 3;
     private ProgressDialog mDialog;
-
+    private static final int ThUMB_SIZE = 150;
+    private String APP_ID ="wx93285cfd2b026fc0";
+    private IWXAPI wxApi = WXAPIFactory.createWXAPI(Activity_camera.this,APP_ID); //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+
 
 
         //******************************布局设置***************************************************
@@ -289,7 +306,8 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
 
                         PhotoClipperUtil.saveMyBitmap(clipFile,mConvertedBitmap);
                         Toast.makeText(Activity_camera.this, "朋友圈", Toast.LENGTH_SHORT).show();
-
+                        Weixin.WeiXinRegister(Activity_camera.this);
+                        Weixin.image_share(mConvertedBitmap, 0,Activity_camera.this);
                         mSaveWindow.dismiss();            //关闭按钮
 
                     }
@@ -359,7 +377,6 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
         return new PointF(x / 2, y / 2);
     }
 
-    @Override
     public boolean onTouch(View v, MotionEvent event) {
         ImageView view = (ImageView) v;
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
