@@ -1,5 +1,6 @@
 package com.example.ourapplication;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v7.app.ActionBar;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,10 +55,20 @@ public class HistoryActivity extends AppCompatActivity {
         hisView.setLayoutManager(layoutManager);
 
         historyAdapter = new hisAdapter(mHisList);
-        Log.i(TAG,"hisAdapter "+historyAdapter.getItemCount()+"");
-        Log.i(TAG,"hisList "+mHisList.size()+"");
         hisView.setAdapter(historyAdapter);
 
+        historyAdapter.setOnItemClickListener(new hisAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                imageUriSet hisChoosed = mHisList.get(position);
+                Uri hisUri = hisChoosed.getImageUri();
+                Toast.makeText(HistoryActivity.this,"请求成功，转向转换界面", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HistoryActivity.this,Activity_camera.class);
+                intent.putExtra("photoUri",hisUri.toString());
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
 
@@ -74,16 +86,11 @@ public class HistoryActivity extends AppCompatActivity {
                 }
                 else{
                     String fileName = file.getName();
-
-                    Log.i(TAG,fileName);
-
                     if(fileName.endsWith(".jpg")&&file.length()!=0){            //如果是图片
                         tempuri = Uri.fromFile(file);
                         imageUriSet hisUri = new imageUriSet(tempuri);
                         hisUri.setImagePath(HEAD_ICON_DIC + File.separator + fileName);   //设置图片路径
                         mHisList.add(hisUri);
-
-                        Log.i(TAG,"add to list");
                     }
                 }
             }

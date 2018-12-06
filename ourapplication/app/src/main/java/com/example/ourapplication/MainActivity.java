@@ -90,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent intent=getIntent();
         String name=intent.getStringExtra("用户名");
-//        username =(TextView) findViewById(R.id.username);
-//        username.setText("welcome "+name+" to the camera app!!!");
 
         //***************************布局设置****************************************
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_mainwindow);

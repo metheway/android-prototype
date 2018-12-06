@@ -33,7 +33,7 @@ import java.util.List;
 public class Activity_camera extends AppCompatActivity {
 
     //*************************************************
-    private List<imageUriSet> bgList= new ArrayList<>();
+    private List<imageUriSet> mBgList= new ArrayList<>();
     private Toolbar toolbar;
     private bgAdapter mBgAdapter;
     private Button reChooseButton;
@@ -84,7 +84,7 @@ public class Activity_camera extends AppCompatActivity {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         bgRecView.setLayoutManager(layoutManager);
 
-        mBgAdapter = new bgAdapter(bgList);
+        mBgAdapter = new bgAdapter(mBgList);
         bgRecView.setAdapter(mBgAdapter);
         bgRecView.setVisibility(View.INVISIBLE);
         mBgAdapter.setOnItemClickListener(new bgAdapter.OnItemClickListener() {
@@ -93,9 +93,9 @@ public class Activity_camera extends AppCompatActivity {
                 //Toast.makeText(Activity_camera.this, position+" "+layoutManager.getItemCount(),Toast.LENGTH_SHORT).show();
                 //View view = layoutManager.findViewByPosition(position);
                 //Toast.makeText(Activity_camera.this,backgroundChoosed.getName(), Toast.LENGTH_SHORT).show();
-                imageUriSet bgchoosed = bgList.get(position);
+                imageUriSet bgChoosed = mBgList.get(position);
                 TextView text_bg = (TextView)findViewById(R.id.text_bg);
-                text_bg.setText(bgchoosed.getImageParam());
+                text_bg.setText(bgChoosed.getImageParam());
                 //picture.setImageResource(bgchoosed.getImageId());
 
             }
@@ -311,34 +311,34 @@ public class Activity_camera extends AppCompatActivity {
 
     private void initBackground() {                             //初始化背景图片
 
-        bgList.clear();
+        mBgList.clear();
         imageUriSet bg1 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg1));
         bg1.setImageParam("bg1");
-        bgList.add(bg1);
+        mBgList.add(bg1);
         imageUriSet bg2 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg2));
         bg2.setImageParam("bg2");
-        bgList.add(bg2);
+        mBgList.add(bg2);
         imageUriSet bg3 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg3));
         bg3.setImageParam("bg3");
-        bgList.add(bg3);
+        mBgList.add(bg3);
         imageUriSet bg4 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg4));
         bg4.setImageParam("bg4");
-        bgList.add(bg4);
+        mBgList.add(bg4);
         imageUriSet bg5 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg5));
         bg5.setImageParam("bg5");
-        bgList.add(bg5);
+        mBgList.add(bg5);
         imageUriSet bg6 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg6));
         bg6.setImageParam("bg6");
-        bgList.add(bg6);
+        mBgList.add(bg6);
         imageUriSet bg7 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg7));
         bg7.setImageParam("bg7");
-        bgList.add(bg7);
+        mBgList.add(bg7);
         imageUriSet bg8 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg8));
         bg8.setImageParam("bg8");
-        bgList.add(bg8);
+        mBgList.add(bg8);
         imageUriSet bg9 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg9));
         bg9.setImageParam("bg9");
-        bgList.add(bg9);
+        mBgList.add(bg9);
     }
 
     public Uri getUriFromDrawableRes(int id) {

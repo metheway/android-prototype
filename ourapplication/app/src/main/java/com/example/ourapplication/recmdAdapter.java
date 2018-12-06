@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 import android.util.LruCache;
 import android.util.Log;
 
-import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
 
@@ -37,10 +35,8 @@ public class recmdAdapter extends RecyclerView.Adapter<recmdAdapter.ViewHolder> 
     private boolean isFirstEnter = true;    //页面首次进入的标记
     private int mFirstVisibleItemPosition;   //前RecyclerView 第一个可见条目的索引
     private int mLastVisibleItemPosition;   //当前RecyclerView 最后一个可见条目的索引
-
     String Tag;
-
-
+    
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         ImageView recmdView;
@@ -117,9 +113,8 @@ public class recmdAdapter extends RecyclerView.Adapter<recmdAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {    //here
+    public void onBindViewHolder(ViewHolder holder, int position) {
         imageUriSet mRec = mRecmdSet.get(position);
-//        holder.recmdView.setImageURI(mRec.getImageUri());
         holder.recmdParam.setText(mRec.getImageParam());
         setImageView(holder.recmdView, mRec.getImageUri());
     }
@@ -192,7 +187,7 @@ public class recmdAdapter extends RecyclerView.Adapter<recmdAdapter.ViewHolder> 
             Uri temp = Uri.parse(params[0]);
             Bitmap bitmap = BitmapFactory.decodeFile(temp.getEncodedPath());
             if (bitmap != null) {
-                // 图片下载完成后缓存到LrcCache中
+                // 图片加载完成后缓存到LrcCache中
                 addBitmapToMemoryCache(params[0], bitmap);
             }
             return bitmap;
