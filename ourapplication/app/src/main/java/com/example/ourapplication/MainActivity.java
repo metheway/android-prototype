@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         Resources resource=(Resources)getBaseContext().getResources();
         ColorStateList csl=(ColorStateList)resource.getColorStateList(R.color.text_color_navigation);
         navView.setItemTextColor(csl);
-//        navView.getMenu().findItem(R.id.email_icon).setTitle(intent.getStringExtra("用户名"));
+        navView.getMenu().findItem(R.id.email_icon).setTitle(intent.getStringExtra("用户名"));
         //navView.setCheckedItem(R.id.email_icon);
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -36,7 +36,7 @@ public class recmdAdapter extends RecyclerView.Adapter<recmdAdapter.ViewHolder> 
     private int mFirstVisibleItemPosition;   //前RecyclerView 第一个可见条目的索引
     private int mLastVisibleItemPosition;   //当前RecyclerView 最后一个可见条目的索引
     String Tag;
-    
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         ImageView recmdView;
