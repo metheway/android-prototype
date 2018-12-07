@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Camera APPlication</string>
+    <string name="app_name">笔画印象</string>
     <string name="title_activity_login">用户登录</string>
     <string name="input_topic">请输入主题</string>
     <string-array name="input_qos">

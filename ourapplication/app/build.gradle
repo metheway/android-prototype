@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'test'
+            keyPassword 'transformer'
+            storeFile file('D:/android lib/group10')
+            storePassword 'transformer'
+        }
+    }
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.example.ourapplication"
@@ -19,6 +27,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config
         }
     }
 }
