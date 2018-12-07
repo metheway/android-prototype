@@ -1,6 +1,7 @@
 package com.example.ourapplication;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -50,9 +51,10 @@ import static com.example.ourapplication.PhotoClipperUtil.getImageContentUri;
 public class MainActivity extends AppCompatActivity {
 
     //******************************************************************************
+    private Context mContext;
     private popWindow myPopWindow;
     private DrawerLayout mainDrawerLayout;
-    private List<picSet> mRecommandList= new ArrayList<>();           //系统推荐&历史记录
+    private List<imageUriSet> mRecmdList= new ArrayList<>();           //系统推荐&历史记录
     private TextView hintText;
     //******************************************************************************
     private Context mContext;
@@ -97,9 +99,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent=getIntent();
+//<<<<<<< master
+        String name=intent.getStringExtra("用户名");
+//=======
         name=intent.getStringExtra("用户名");
 //        username =(TextView) findViewById(R.id.username);
 //        username.setText("welcome "+name+" to the camera app!!!");
+//>>>>>>> master
 
         //***************************布局设置****************************************
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar_mainwindow);
@@ -167,11 +173,11 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recommandView.setLayoutManager(layoutManager);
 
-        picViewAdapter recommandAdapter = new picViewAdapter(mRecommandList);                      //picViewAdapter.java
-        recommandView.setAdapter(recommandAdapter);
+        recmdAdapter recmdAdapter = new recmdAdapter(mContext,recommandView,mRecmdList);                      //recmdAdapter.java
+        recommandView.setAdapter(recmdAdapter);
 
 
-        createFile();
+        createFile();       //创建文件夹存放图片
 
         hintText = (TextView)findViewById(R.id.hint);
 
@@ -323,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this,"请求拒绝", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case REQUEST_IMAGE_CAPTURE:
+            case REQUEST_IMAGE_CAPTURE:            //拍照
                 if (resultCode == RESULT_OK) {
                     //拍照后返回,调用系统裁剪
                     //Uri.fromFile()得到file://，而getUriFromFile()得到content开头的
@@ -331,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
                     //安卓无法识别file://开头的uri
                 }
                 break;
-            case REQUEST_IMAGE_GET:
+            case REQUEST_IMAGE_GET:                //相册选图
                 if (resultCode == RESULT_OK) {
                     if (data != null) {
                         String filePath = "";
@@ -366,8 +372,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void initHeadIconFile() {
         headIconFile = new File(HEAD_ICON_DIC);
+//<<<<<<< master
+        headClipFile = getTempFile();             //裁剪后的图像
+        clipFileNameStr = headClipFile.getName().toString();    //获取文件名
+//=======
         headClipFile = new File(CLIP_ICON_DIC);
         clipFileNameStr = headClipFile.getName().toString();
+//>>>>>>> master
 
 
         if(!headIconFile.exists()){
@@ -398,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
             pictureUri = Uri.fromFile(headIconFile);
         }
         //去拍照
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,pictureUri);//把拍照的普片存在headIconFile里面
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,pictureUri);//把拍照的照片存在headIconFile里面
         startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
 
     }
@@ -472,7 +483,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private File getTempFile() {
-        String fileName = new Date().getTime()+".jpg";
+        String fileName = new Date().getTime()+".jpg";       //生成文件名
         File file = new File(HEAD_ICON_DIC, fileName);
         try {
             file.createNewFile();
@@ -506,33 +517,50 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecommand() {
 
-        picSet recommend1 = new picSet(R.drawable.u16,"系统推荐");
-        mRecommandList.add(recommend1);
+        mRecmdList.clear();
+        imageUriSet recommend1 = new imageUriSet(getUriFromDrawableRes(R.drawable.u16));
+        recommend1.setImageParam("系统推荐");
+        mRecmdList.add(recommend1);
+//        Log.i(TAG,"推荐图片uri "+recommend1.getImageUri().toString());
 
-        picSet recommend2 = new picSet(R.drawable.u17,"系统推荐");
-        mRecommandList.add(recommend2);
+        imageUriSet recommend2 = new imageUriSet(getUriFromDrawableRes(R.drawable.u17));
+        recommend2.setImageParam("系统推荐");
+        mRecmdList.add(recommend2);
 
-        picSet recommend3 = new picSet(R.drawable.u18,"系统推荐");
-        mRecommandList.add(recommend3);
+        imageUriSet recommend3 = new imageUriSet(getUriFromDrawableRes(R.drawable.u18));
+        recommend3.setImageParam("系统推荐");
+        mRecmdList.add(recommend3);
 
-        picSet recommend4 = new picSet(R.drawable.u2,"系统推荐");
-        mRecommandList.add(recommend4);
+        imageUriSet recommend4 = new imageUriSet(getUriFromDrawableRes(R.drawable.u2));
+        recommend4.setImageParam("系统推荐");
+        mRecmdList.add(recommend4);
 
-        picSet recommend5 = new picSet(R.drawable.u1,"系统推荐");
-        mRecommandList.add(recommend5);
+        imageUriSet recommend5 = new imageUriSet(getUriFromDrawableRes(R.drawable.u1));
+        recommend5.setImageParam("系统推荐");
+        mRecmdList.add(recommend5);
 
-        picSet recommend6 = new picSet(R.drawable.u3,"系统推荐");
-        mRecommandList.add(recommend6);
+        imageUriSet recommend6 = new imageUriSet(getUriFromDrawableRes(R.drawable.u3));
+        recommend6.setImageParam("系统推荐");
+        mRecmdList.add(recommend6);
 
-        picSet recommend7 = new picSet(R.drawable.u5,"系统推荐");
-        mRecommandList.add(recommend7);
+        imageUriSet recommend7 = new imageUriSet(getUriFromDrawableRes(R.drawable.u5));
+        recommend7.setImageParam("系统推荐");
+        mRecmdList.add(recommend7);
 
-        picSet recommend8 = new picSet(R.drawable.u4,"系统推荐");
-        mRecommandList.add(recommend8);
+        imageUriSet recommend8 = new imageUriSet(getUriFromDrawableRes(R.drawable.u4));
+        recommend8.setImageParam("系统推荐");
+        mRecmdList.add(recommend8);
 
         //可以在首页展示历史记录
+    }
 
-
+    public Uri getUriFromDrawableRes(int id) {
+        Resources resources=(Resources)getBaseContext().getResources();
+        String path = ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
+                + resources.getResourcePackageName(id) + "/"
+                + resources.getResourceTypeName(id) + "/"
+                + resources.getResourceEntryName(id);
+        return Uri.parse(path);
     }
     //**************************************************************************************
 }

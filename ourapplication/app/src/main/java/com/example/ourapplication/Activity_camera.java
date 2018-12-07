@@ -1,7 +1,10 @@
 package com.example.ourapplication;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -47,9 +50,9 @@ public class Activity_camera extends AppCompatActivity {
 //>>>>>>> Stashed changes
 
     //*************************************************
-    private List<bgSet> bgList= new ArrayList<>();
+    private List<imageUriSet> mBgList= new ArrayList<>();
     private Toolbar toolbar;
-    private bgAdapter myBgAdapter;
+    private bgAdapter mBgAdapter;
     private Button reChooseButton;
     private Button transformButton;
     private Button bgButton;
@@ -112,18 +115,19 @@ public class Activity_camera extends AppCompatActivity {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         bgRecView.setLayoutManager(layoutManager);
 
-        myBgAdapter = new bgAdapter(bgList);
-        bgRecView.setAdapter(myBgAdapter);
+        mBgAdapter = new bgAdapter(mBgList);
+        bgRecView.setAdapter(mBgAdapter);
         bgRecView.setVisibility(View.INVISIBLE);
-        myBgAdapter.setOnItemClickListener(new bgAdapter.OnItemClickListener() {
+        mBgAdapter.setOnItemClickListener(new bgAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {          //背景图片点击事件
                 //Toast.makeText(Activity_camera.this, position+" "+layoutManager.getItemCount(),Toast.LENGTH_SHORT).show();
                 //View view = layoutManager.findViewByPosition(position);
                 //Toast.makeText(Activity_camera.this,backgroundChoosed.getName(), Toast.LENGTH_SHORT).show();
-                bgSet bgchoosed = bgList.get(position);
+                imageUriSet bgChoosed = mBgList.get(position);
                 TextView text_bg = (TextView)findViewById(R.id.text_bg);
-                text_bg.setText(bgchoosed.getName());
+                text_bg.setText(bgChoosed.getImageParam());
+                //picture.setImageResource(bgchoosed.getImageId());
 
             }
         });
@@ -342,24 +346,35 @@ public class Activity_camera extends AppCompatActivity {
     }
 
     private void initBackground() {                             //初始化背景图片
-        bgSet bg1 = new bgSet("bg1", R.drawable.bg1);
-        bgList.add(bg1);
-        bgSet bg2 = new bgSet("bg2", R.drawable.bg2);
-        bgList.add(bg2);
-        bgSet bg3 = new bgSet("bg3", R.drawable.bg3);
-        bgList.add(bg3);
-        bgSet bg4 = new bgSet("bg4", R.drawable.bg4);
-        bgList.add(bg4);
-        bgSet bg5 = new bgSet("bg5", R.drawable.bg5);
-        bgList.add(bg5);
-        bgSet bg6 = new bgSet("bg6", R.drawable.bg6);
-        bgList.add(bg6);
-        bgSet bg7 = new bgSet("bg7", R.drawable.bg7);
-        bgList.add(bg7);
-        bgSet bg8 = new bgSet("bg8", R.drawable.bg8);
-        bgList.add(bg8);
-        bgSet bg9 = new bgSet("bg9", R.drawable.bg9);
-        bgList.add(bg9);
+
+        mBgList.clear();
+        imageUriSet bg1 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg1));
+        bg1.setImageParam("bg1");
+        mBgList.add(bg1);
+        imageUriSet bg2 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg2));
+        bg2.setImageParam("bg2");
+        mBgList.add(bg2);
+        imageUriSet bg3 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg3));
+        bg3.setImageParam("bg3");
+        mBgList.add(bg3);
+        imageUriSet bg4 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg4));
+        bg4.setImageParam("bg4");
+        mBgList.add(bg4);
+        imageUriSet bg5 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg5));
+        bg5.setImageParam("bg5");
+        mBgList.add(bg5);
+        imageUriSet bg6 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg6));
+        bg6.setImageParam("bg6");
+        mBgList.add(bg6);
+        imageUriSet bg7 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg7));
+        bg7.setImageParam("bg7");
+        mBgList.add(bg7);
+        imageUriSet bg8 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg8));
+        bg8.setImageParam("bg8");
+        mBgList.add(bg8);
+        imageUriSet bg9 = new imageUriSet(getUriFromDrawableRes(R.drawable.bg9));
+        bg9.setImageParam("bg9");
+        mBgList.add(bg9);
     }
     
     /////////////////////////////////////////////// //\\//
@@ -422,5 +437,17 @@ public class Activity_camera extends AppCompatActivity {
         return true;
     }
 
+// <<<<<<< master
+    public Uri getUriFromDrawableRes(int id) {
+        Resources resources = (Resources)getBaseContext().getResources();
+        String path = ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
+                + resources.getResourcePackageName(id) + "/"
+                + resources.getResourceTypeName(id) + "/"
+                + resources.getResourceEntryName(id);
+        return Uri.parse(path);
+    }
+}
+// =======
     /////////////////////////////////////////////// //\\//
 }
+// >>>>>>> master
