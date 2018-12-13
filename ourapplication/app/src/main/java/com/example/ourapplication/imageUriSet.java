@@ -27,6 +27,7 @@ public class imageUriSet {
 
     public String getImagePath(){ return imagePath; }
 
+
     public String getImageParam(){
         return imageParam;
     }

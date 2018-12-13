@@ -13,10 +13,12 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,47 +43,25 @@ public class PhotoClipperUtil {
 
 
     public static void saveMyBitmap(File file, Bitmap mBitmap) {
+        BufferedOutputStream bos = null;
         try {
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
-            }
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        FileOutputStream fOut = null;
-        ByteArrayOutputStream baos = null;
-
-        baos = new ByteArrayOutputStream();
-        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        while(baos.toByteArray().length / 1024 > 100){
-            baos.reset();
-            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        }
-        try {
-            fOut = new FileOutputStream(file);
-            fOut.write(baos.toByteArray());
+            bos = new BufferedOutputStream(new FileOutputStream(file));
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+        try {
+            bos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            fOut.flush();
-            baos.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            fOut.close();
-            baos.close();
+            bos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    //yin
+
     public static Uri getImageContentUri(Context context, File imageFile) {
 
         String filePath = imageFile.getAbsolutePath();
@@ -107,6 +87,7 @@ public class PhotoClipperUtil {
             }
         }
     }
+
     @SuppressLint ("NewApi")
     public static String getPath(final Context context, final Uri uri) {
 
@@ -150,7 +131,7 @@ public class PhotoClipperUtil {
 
                 final String selection = "_id=?";
                 final String[] selectionArgs = new String[] {
-                        split[1]
+                        split[1]//就是id
                 };
 
                 return getDataColumn(context, contentUri, selection, selectionArgs);
@@ -161,13 +142,13 @@ public class PhotoClipperUtil {
             // Return the remote address
             if (isGooglePhotosUri(uri))
                 return uri.getLastPathSegment();
-
             return getDataColumn(context, uri, null, null);
         }
         // File
         else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }
+
 
         return null;
     }
@@ -194,8 +175,10 @@ public class PhotoClipperUtil {
         try {
             cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
                     null);
+            Log.i("MainActiviy","dfdf"+cursor.toString());
             if (cursor != null && cursor.moveToFirst()) {
                 final int index = cursor.getColumnIndexOrThrow(column);
+                Log.i("MainActivity","curssss" + cursor.getString(index));
                 return cursor.getString(index);
             }
         } finally {

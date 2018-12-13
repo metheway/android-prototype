@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -31,7 +32,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -41,6 +41,7 @@ import com.example.download.NetServiceTask;
 import com.example.download.URLPostHandler;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,29 +52,23 @@ import static com.example.ourapplication.PhotoClipperUtil.getImageContentUri;
 public class MainActivity extends AppCompatActivity {
 
     //******************************************************************************
-    private Context mContext;
+    private Context mContext = this ;
     private popWindow myPopWindow;
     private DrawerLayout mainDrawerLayout;
     private List<imageUriSet> mRecmdList= new ArrayList<>();           //系统推荐&历史记录
     private TextView hintText;
     //******************************************************************************
-    private Context mContext;
 
-    public Context getmContext() {
-        return getApplicationContext();
-    }
-
-    public static final String HEAD_ICON_DIC = Environment
+/*    public static final String HEAD_ICON_DIC = Environment
             .getExternalStorageDirectory()
-            + File.separator + "headIcon";//存在sd卡上的headIcon里面
+            + File.separator + "headIcon";//存在sd卡上的headIcon里面*/
     public static final String CLIP_ICON_DIC = Environment
             .getExternalStorageDirectory()
             + File.separator + "clipIcon";//存在sd卡上的headIcon里面
 
-    private File headIconFile = null;// 相册或者拍照保存的文件
     private File headClipFile = null;// 裁剪后的头像
-    private String headFileNameStr = "headIcon.jpg";//初始化这两个图片,实际不是这两个文件名称
-    private String clipFileNameStr = "clipIcon.jpg";
+//    private String headFileNameStr = "headIcon.png";//初始化这两个图片,实际不是这两个文件名称
+    private String clipFileNameStr = "clipIcon.png";
     protected final String TAG = getClass().getSimpleName();
     private Uri pictureUri;//这个是照片的Uri，实际上就是headIconFile的Uri
 
@@ -88,12 +83,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_STORAGE = 103;
     
     private byte[] result;
-    Uri imageUri;
-    ImageView headImg;
-    Bitmap bitmap = null;
     private Uri outPutUri;
-    private TextView username;
-    private String name;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,34 +122,46 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()){
 
                     case R.id.history_icon:            //选择查看历史背景
-                        mainDrawerLayout.closeDrawers();
 
-//                        String address = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1490783056273&di=6160d101d31dcf5f44b443ad9c5b2648&imgtype=0&src=http%3A%2F%2Fimg.sc115.com%2Fuploads%2Fallimg%2F110626%2F2011062622383898.jpg";
-                        String[] addresses = new String[]{
-                                "http://www.vayhee.cn/eplatform/img/ad.jpg"
-
-                        };
-                        String address = null;
-                        for(int i =0 ;i < addresses.length ;i++){
-                            address = addresses[i];
-                            NetServiceTask netServerTask = new NetServiceTask(address, new URLPostHandler() {
+                        String url = null;
+//                        SharedPreferences sharedPreferences = getSharedPreferences("history",
+//                                Context.MODE_PRIVATE);
+//                        int historyNum = sharedPreferences.getInt("historyNum",0);
+//                        Log.i(TAG,historyNum + "adfsdf");
+                        String userName = LoginActivity.username;
+                        String password = LoginActivity.passwd;
+//                        for(int i = 0; i < historyNum ; i++){
+                        for(int i = 0; i < 6 ; i++){
+                            final int tmp = i + 1;
+//                            url = "http://www.vayhee.cn/eplatform/img/" + String.valueOf(tmp) + ".jpg";
+                            String subPath = userName + "/";
+                            url = "http://www.vayhee.cn/infomanage/DownloadServlet?filename=" +
+                                    subPath + tmp + ".png";
+                            Log.i("MainActivity",url);
+                            NetServiceTask netServerTask = new NetServiceTask(url, new URLPostHandler() {
                                 @Override
                                 public void PostHandler(Bitmap bitmap) {
-                                    File file = new File(CLIP_ICON_DIC,getTempFile().getName());
-                                    try {
-                                        PhotoClipperUtil.saveFile(getmContext(),bitmap,file);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
+                                    File file = new File(CLIP_ICON_DIC,"history" + tmp + ".png");
+                                    Log.i(TAG,file.getAbsolutePath() +"abc");
+                                    if(!file.exists()){
+                                        try {
+                                            file.createNewFile();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }else{
                                     }
-                                    Toast.makeText(MainActivity.this,"dsfd",Toast.LENGTH_SHORT).show();
-
+                                    //从后台得到的图片，保存在相应的文件里面
+                                    PhotoClipperUtil.saveMyBitmap(file,bitmap);
                                 }
                             });
                             Thread thread = new Thread(netServerTask);
                             thread.start();
-                        }//载入历史图片,保存到CLIP_ICON_DIC文件夹
+                        }
+                        mainDrawerLayout.closeDrawers();
                         Intent history_show = new Intent(MainActivity.this,HistoryActivity.class);
                         startActivity(history_show);
+
                         break;
                     case R.id.bg_icon:                  //选择查看个人背景
                         mainDrawerLayout.closeDrawers();
@@ -175,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
 
         recmdAdapter recmdAdapter = new recmdAdapter(mContext,recommandView,mRecmdList);                      //recmdAdapter.java
         recommandView.setAdapter(recmdAdapter);
-
 
         createFile();       //创建文件夹存放图片
 
@@ -245,9 +248,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        Button photo = (Button)findViewById(R.id.Photo_main);
-//        Button picture = (Button)findViewById(R.id.Picture_main);
-
     }
 
 
@@ -273,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
             }, REQUEST_STORAGE);//103
         } else {
             initHeadIconFile();
+            Log.i(TAG,"创建文件成功");
         }
     }
 
@@ -285,8 +286,8 @@ public class MainActivity extends AppCompatActivity {
                     initHeadIconFile();
                 }
                 else{
-                    Toast.makeText(this,"你拒绝了请求", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(this,"你拒绝了请求", Toast.LENGTH_SHORT).show();
+        }
                 break;
             case REQUEST_IMAGE_GET :
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -315,16 +316,22 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        super.onActivityResult(requestCode,resultCode,data);
+       // Log.i(TAG,"abc" + String.valueOf(resultCode));
+        Log.i(TAG,"abc" + String.valueOf(requestCode));
         switch (requestCode) {
             case CLIP_PHOTO_BIG_REQUEST_CODE:
+                Log.i(TAG,"clip big photo request code");
                 if (resultCode == RESULT_OK) {
+
                     Toast.makeText(this,"请求成功，转向转换界面", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MainActivity.this,Activity_camera.class);
 //                    intent.putExtra("bitmap",result);
                     intent.putExtra("photoUri",outPutUri.toString());
                     startActivity(intent);
                     //这个时候bitmap里面应该存着图片了，直接传入就可以接收。
+
+                    //通知系统图库更新，用来更新系统图库的数据库，这样才可以通过cursor从uri得到路径
                 } else {
                     Toast.makeText(this,"请求拒绝", Toast.LENGTH_SHORT).show();
                 }
@@ -335,6 +342,7 @@ public class MainActivity extends AppCompatActivity {
                     //Uri.fromFile()得到file://，而getUriFromFile()得到content开头的
                     clipperBigPic(this,pictureUri);
                     //安卓无法识别file://开头的uri
+                    Log.i("image_capture","success");
                 }
                 break;
             case REQUEST_IMAGE_GET:                //相册选图
@@ -348,11 +356,8 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         if (filePath != null && filePath.length() > 0) {
-//                            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-//                            saveMyBitmap(headIconFile,bitmap);
-                            //保存过程，会不会添加到sqlite
-//                            clipperBigPic(this,getImageContentUri(this,headIconFile));
                             clipperBigPic(this,originalUri);
+                            Log.i(TAG,originalUri.toString());
                         }
                     }
                 }
@@ -362,33 +367,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-/*
-    private void transBitmapToBytes(Bitmap bitmap) {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();//初始化一个流对象
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, output);//把bitmap100%高质量压缩 到 output对象里
-        result = output.toByteArray();//转换成功了  result就是一个bit的资源数组
-    }
-*/
 
     private void initHeadIconFile() {
-        headIconFile = new File(HEAD_ICON_DIC);
 //<<<<<<< master
-        headClipFile = getTempFile();             //裁剪后的图像
-        clipFileNameStr = headClipFile.getName().toString();    //获取文件名
-//=======
-        headClipFile = new File(CLIP_ICON_DIC);
-        clipFileNameStr = headClipFile.getName().toString();
+        headClipFile = new File(CLIP_ICON_DIC);             //裁剪后的图像
+//        headFileNameStr = headClipFile.getName().toString();    //获取文件名
+//        head = new File(CLIP_ICON_DIC);
+        clipFileNameStr = new Date().getTime() + ".png";
 //>>>>>>> master
 
-
-        if(!headIconFile.exists()){
-            boolean mkdirs = headIconFile.mkdirs();//如果是第一次，那么创建文件夹，那么创建
-        }
         if(!headClipFile.exists()){
-            boolean mkdirs = headClipFile.mkdirs();
+            headClipFile.mkdirs();
         }
-        headIconFile = new File(HEAD_ICON_DIC,headFileNameStr);
+//        headIconFile = new File(HEAD_ICON_DIC,headFileNameStr);
         headClipFile = new File(CLIP_ICON_DIC,clipFileNameStr);//创建裁剪文件
+        try {
+            headClipFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        headClipFile = new File(CLIP_ICON_DIC,clipFileNameStr);
     }
 
 
@@ -396,20 +394,13 @@ public class MainActivity extends AppCompatActivity {
     private void imageCapture() {
         //拍照
         Intent intent ;
-//        File pictureFile = headIconFile;
-        //判断当前系统,获取文件headIconFile的Uri，就是原文件的uri
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
-            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-            pictureUri = FileProvider.getUriForFile(this,
-                    "com.example.ourapplication.fileprovider",headIconFile);
-        }else{
-            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            pictureUri = Uri.fromFile(headIconFile);
-        }
+        //判断当前系统,获取文件headClipFile的Uri，就是原文件的uri
+        pictureUri = PhotoClipperUtil.getUriFromFile(this,headClipFile);
+        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         //去拍照
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,pictureUri);//把拍照的照片存在headIconFile里面
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,pictureUri);//把拍照的照片存在headClipFile里面
         startActivityForResult(intent,REQUEST_IMAGE_CAPTURE);
 
     }
@@ -425,34 +416,30 @@ public class MainActivity extends AppCompatActivity {
             Log.i(TAG, "Uri不存在");
             return;
         }
-
+        //这里的uri已经是经过sdk24判断封装是否从provider调出的
         Intent intent = new Intent("com.android.camera.action.CROP");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-//            String url = headIconFile.getAbsolutePath();
-            //            String url = PhotoClipperUtil.getPath(context, uri);
-            //这里不能从uri得到url，原因是getPath这个方法用cursor找的路径，而没有把路径添加到数据库里
+        //这里判断版本19是区分能否直接从File得到uri
+            //这里不能从uri得到url，原始图片的uri传入
             intent.setDataAndType(uri, IMAGE_TYPE);
-            //裁剪后图片输出
+            //裁剪后图片输出文件的Uri
             outPutUri = getImageContentUri(this,headClipFile);
+            Log.i(TAG,"1"+outPutUri.toString());
             //添加上输出的uri
             intent.putExtra(MediaStore.EXTRA_OUTPUT, outPutUri);
+            Log.i(TAG,"2"+outPutUri.toString());
             intent.putExtra("noFaceDetection", false);//去除默认的人脸识别，否则和剪裁框重叠
+            Log.i(TAG,"3"+outPutUri.toString());
             //临时授权该Uri所代表的文件的读权限,不加入该flag将导致无法加载图片
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Log.i(TAG,"4"+outPutUri.toString());
             //临时授权该Uri所代表的文件的写权限,不加入该flag将导致无法加载图片
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            Log.i(TAG,"5"+outPutUri.toString());
 
         }else{
-            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-//                String url = PhotoClipperUtil.getPath(this, uri);//这个方法是处理4.4以上图片返回
-                // 的Uri对象不同的处理方法
-                String url = headIconFile.getAbsolutePath();
-                intent.setDataAndType(Uri.fromFile(new File(url)), IMAGE_TYPE);
-            } else {
-            intent.setDataAndType(uri, IMAGE_TYPE);
-            }
             //裁剪后图片输出
+            intent.setDataAndType(uri, IMAGE_TYPE);
             outPutUri = getImageContentUri(this,headClipFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, outPutUri);
         }
@@ -474,23 +461,10 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
         //裁剪图片保存位置
         //启动
-        startActivityForResult(intent, CLIP_PHOTO_BIG_REQUEST_CODE);
-    }
+        startActivityForResult(intent,CLIP_PHOTO_BIG_REQUEST_CODE);
+        Log.i(TAG,"成功了"+CLIP_PHOTO_BIG_REQUEST_CODE);
 
-    private Uri getTempUri() {
 
-        return Uri.fromFile(getTempFile());//这个
-    }
-
-    private File getTempFile() {
-        String fileName = new Date().getTime()+".jpg";       //生成文件名
-        File file = new File(HEAD_ICON_DIC, fileName);
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return file;
     }
 
     //***************************************************************************************

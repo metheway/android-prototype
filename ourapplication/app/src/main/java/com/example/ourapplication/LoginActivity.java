@@ -51,6 +51,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity  {
     protected static final int ERROR = 1;
     protected static final int SUCCESS = 2;
+    public static String username ;
+    public static String passwd ;
     BufferedReader bufferReader;
     private EditText account;
     private EditText password;
@@ -87,6 +89,8 @@ public class LoginActivity extends AppCompatActivity  {
     public void login(View view){
         final String qq=account.getText().toString().trim();
         final String pwd=password.getText().toString().trim();
+        username = qq;
+        passwd = pwd;
         if(TextUtils.isEmpty(qq)){
             Toast.makeText(this,"用户名为空登录失败", Toast.LENGTH_SHORT).show();
             return;
