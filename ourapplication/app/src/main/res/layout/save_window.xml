@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/save_window"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightYellow"
+    android:layout_alignParentBottom="true">
+
+    <Button
+        android:id="@+id/closebtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/close"
+        android:layout_alignParentRight="true"/>
+
+    <RelativeLayout
+        android:id="@+id/save_success"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="60dp" >
+
+        <TextView
+            android:id="@+id/success_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="图片保存成功 "
+            android:textSize="25sp" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/success_text"
+            android:layout_centerVertical="true"
+            android:background="@drawable/smile" />
+
+
+    </RelativeLayout>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/save_success">
+
+        <TextView
+            android:id="@+id/fenxiang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:text="点我分享到朋友圈吧"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/sharebtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/fenxiang"
+            android:background="@drawable/pengyouquan"/>
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
+

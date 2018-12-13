@@ -2,15 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e6bafbfb-4c72-4aa1-924d-ab6fa3a33db6" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/ourapplication/.idea/caches/build_file_checksums.ser" afterPath="$PROJECT_DIR$/ourapplication/.idea/caches/build_file_checksums.ser" />
+      <change beforePath="$PROJECT_DIR$/ourapplication/.idea/caches/build_file_checksums.ser" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ourapplication/.idea/dictionaries/lenovo.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/ourapplication/.idea/gradle.xml" afterPath="$PROJECT_DIR$/ourapplication/.idea/gradle.xml" />
       <change beforePath="$PROJECT_DIR$/ourapplication/.idea/misc.xml" afterPath="$PROJECT_DIR$/ourapplication/.idea/misc.xml" />
-      <change beforePath="$PROJECT_DIR$/ourapplication/app/build.gradle" afterPath="$PROJECT_DIR$/ourapplication/app/build.gradle" />
+      <change beforePath="$PROJECT_DIR$/ourapplication/.idea/runConfigurations.xml" afterPath="$PROJECT_DIR$/ourapplication/.idea/runConfigurations.xml" />
+      <change beforePath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/Activity_Transform.java" afterPath="" />
       <change beforePath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/Activity_camera.java" afterPath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/Activity_camera.java" />
-      <change beforePath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/HistoryActivity.java" afterPath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/HistoryActivity.java" />
-      <change beforePath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/LoginActivity.java" afterPath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/LoginActivity.java" />
       <change beforePath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/MainActivity.java" afterPath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/MainActivity.java" />
       <change beforePath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/PhotoClipperUtil.java" afterPath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/PhotoClipperUtil.java" />
-      <change beforePath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/Sketch.java" afterPath="$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/Sketch.java" />
+      <change beforePath="$PROJECT_DIR$/ourapplication/app/src/main/res/layout/activity__transform.xml" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,8 +25,8 @@
       <file leaf-file-name="Activity_camera.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/Activity_camera.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="910">
-              <caret line="35" column="9" lean-forward="false" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
+            <state relative-caret-position="156">
+              <caret line="35" column="46" lean-forward="false" selection-start-line="35" selection-start-column="46" selection-end-line="35" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -73,8 +74,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -163,14 +162,16 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="AndroidView" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="settings.editor.selected.configurable" value="preferences.general" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ourapplication" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -297,12 +298,13 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" x="92" y="92" width="1736" height="856" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22014925" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21801706" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -316,7 +318,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Device File Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" x="92" y="92" width="1736" height="856" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -330,22 +331,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/Activity_camera.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="910">
-          <caret line="35" column="9" lean-forward="true" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="338">
-          <caret line="13" column="24" lean-forward="false" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/Activity_camera.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
@@ -388,8 +373,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ourapplication/app/src/main/java/com/example/ourapplication/Activity_camera.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="910">
-          <caret line="35" column="9" lean-forward="false" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
+        <state relative-caret-position="156">
+          <caret line="35" column="46" lean-forward="false" selection-start-line="35" selection-start-column="46" selection-end-line="35" selection-end-column="46" />
           <folding />
         </state>
       </provider>
