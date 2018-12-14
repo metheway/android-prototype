@@ -27,9 +27,9 @@ public class HistoryActivity extends AppCompatActivity {
     private hisAdapter historyAdapter;
     private RecyclerView hisView;
 
-    public static final String HEAD_ICON_DIC = Environment
+    public static final String CLIP_ICON_DIC = Environment
             .getExternalStorageDirectory()
-            + File.separator + "headIcon";//存在sd卡上的headIcon里面
+            + File.separator + "clipIcon";//存在sd卡上的headIcon里面
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +76,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         mHisList.clear();
         //获取历史记录
-        File path = new File(HEAD_ICON_DIC);
+        File path = new File(CLIP_ICON_DIC);
         File[] files = path.listFiles();          // 读取文件夹下文件
 
         if(files!=null){             //判断文件组是否为空
@@ -86,10 +86,12 @@ public class HistoryActivity extends AppCompatActivity {
                 }
                 else{
                     String fileName = file.getName();
-                    if(fileName.endsWith(".jpg")&&file.length()!=0){            //如果是图片
-                        tempuri = Uri.fromFile(file);
+//                    if(fileName.endsWith(".png")&&file.length()!=0){            //如果是图片
+//                        tempuri = PhotoClipperUtil.getUriFromFile(this,file);
+                    if(fileName.startsWith("history")&&file.length()!=0){
+                        tempuri = PhotoClipperUtil.getImageContentUri(this,file);
                         imageUriSet hisUri = new imageUriSet(tempuri);
-                        hisUri.setImagePath(HEAD_ICON_DIC + File.separator + fileName);   //设置图片路径
+                        hisUri.setImagePath(CLIP_ICON_DIC + File.separator + fileName);   //设置图片路径
                         mHisList.add(hisUri);
                     }
                 }
