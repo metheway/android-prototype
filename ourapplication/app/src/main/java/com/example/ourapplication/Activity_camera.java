@@ -50,7 +50,9 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 //>>>>>>> Stashed changes
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -190,7 +192,7 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
                     e.printStackTrace();
                 }
                 Log.i("Activity_camera",bgChoosed.getImageUri().toString());
-                Bitmap bitmap = Bitmap.createBitmap(500,500, Bitmap.Config.ARGB_4444);
+                Bitmap bitmap = Bitmap.createBitmap(500,500, Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(bitmap);
                 float finalWidth = 500;
                 float finalHeight = 500;
@@ -198,7 +200,7 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
                 matrix.setScale(finalWidth / backgroudBitmap.getWidth(),
                         finalHeight / backgroudBitmap.getHeight());
                 Paint paint = new Paint();
-                canvas.drawBitmap(backgroudBitmap.copy(Bitmap.Config.ARGB_4444,true)
+                canvas.drawBitmap(backgroudBitmap.copy(Bitmap.Config.ARGB_8888,true)
                         ,matrix,paint);
 
                 Paint paint1 = new Paint();
@@ -214,7 +216,7 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
                 Bitmap bitmap2 = bitmapDrawable.getBitmap();
                 matrix.setScale(finalWidth / bitmap2.getWidth(),
                         finalHeight / bitmap2.getHeight());
-                canvas.drawBitmap(bitmap2.copy(Bitmap.Config.ARGB_4444,true)
+                canvas.drawBitmap(bitmap2.copy(Bitmap.Config.ARGB_8888,true)
                 ,matrix,paint1);
                 mConvertedBitmap = ((BitmapDrawable) picture.getDrawable()).getBitmap();
                 bgRecView.setVisibility(View.INVISIBLE);
@@ -249,8 +251,29 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
 //        clipImagePath = PhotoClipperUtil.getPath(getApplicationContext(),clipPhotoUri);
         Log.i("camera","22" + clipImagePath);
         clipImagePath = MainActivity.imagePath;
+
         clipFile = new File(clipImagePath);
-        Bitmap bitmap = BitmapFactory.decodeFile(clipImagePath);
+//        Bitmap bitmap = BitmapFactory.decodeFile(clipImagePath);
+        //这里用的游标找到的，说明在sqlite里面有记录，注意
+        //这个是空的
+        Bitmap bitmap = null;
+        FileInputStream is = null;
+        try {
+            is = new FileInputStream(clipImagePath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            opt.inPreferredConfig = Bitmap.Config.RGB_565;
+            opt.inPurgeable = true;
+            opt.inInputShareable = true;
+            bitmap = BitmapFactory.decodeFileDescriptor(is.getFD(), null,opt);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        clipFile = new File(clipImagePath);
+//        Bitmap bitmap = BitmapFactory.decodeFile(clipImagePath);
         //这里用的游标找到的，说明在sqlite里面有记录，注意
         picture.setImageBitmap(bitmap);
         picture.setOnTouchListener(this);
@@ -316,6 +339,8 @@ public class Activity_camera extends AppCompatActivity implements View.OnTouchLi
                 } else {
                     Toast.makeText(this, "你拒绝了请求", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            default:
                 break;
         }
     }
